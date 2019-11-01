@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BloggersChoice</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'https://stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+  <nav class="navbar navbar-default">
+  <br/>
+  <div class="container-fluid">
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><%= link_to "Home", root_path %></li>
+        <li><%= link_to "BlogSpot", posts_path %></li>
+	<% if user_signed_in? %>
+	<% if current_user.admin? %>
+	<li><%= link_to "Create new Post", new_post_path %></li>
+	<% end %>
+	<% end %>
+  </ul>
+  <ul class="nav navbar-nav navbar-right">
+  <span class="navbar-text text-right">
+    <% if user_signed_in? %>
+      Welcome <strong><%= current_user.email %></strong> |
+      <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+      <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <% else %>
+      <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+      <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+    <% end %>
+  </span>
+  </ul>
+    </div>
+  </div>
+  <br/>
+</nav>
+
+<div class="container">
+    <%= yield %>
+<% if notice %>
+  <p class="alert alert-success"><%= notice %></p>
+    <% elsif alert %>
+  <p class="alert alert-danger"><%= alert %></p>
+  <% else %>
+    <% flash.each do |key, value| %>
+      <%= content_tag(:p, value, class: "alert alert-#{key}") %>
+    <% end %>
+<% end %>
+</div>
+<br/>
+<br/>
+<br/>
+  </body>
+</html>

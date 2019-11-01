@@ -1,0 +1,21 @@
+<h2 style="text-align: center;"><%= @post.title %></h2>
+<p><%= simple_format @post.body %></p>
+<hr>
+<% if current_user.admin? %>
+<%= link_to "Edit", edit_post_path(@post), :class => 'btn btn-success' %>
+<%= link_to "Delete", post_path(@post),
+		method: :delete,
+		data: {confirm: 'Do you want to confirm the action?'},			
+			 :class => 'btn btn-danger' %>
+<% end %>
+<hr>
+<% pre_like = @post.likes.find { |like| like.user_id == current_user.id} %>
+<% if pre_like %>
+  <%= button_to 'Unlike', post_like_path(@post, pre_like), method: :delete, :class => 'btn btn-info' %>
+<% else %>
+  <%= button_to 'Like', post_likes_path(@post), method: :post, :class => 'btn btn-info' %>
+<% end %>
+<p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+<%= render 'comments/comments' %>
+<%= render 'comments/form' %>
+
